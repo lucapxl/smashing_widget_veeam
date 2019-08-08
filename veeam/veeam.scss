@@ -1,0 +1,103 @@
+$background: #444;
+$text: #fff;
+$success: #597526;
+$warning: #ff9618;
+$failure: #ec663c;
+$info: rgb(3, 161, 252);
+$error: #ec663c;
+$unknown: #b5b5b5;
+
+.widget-veeam {
+  li {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding-top: 25px;
+
+    i {
+      font-size: 90px
+    }
+
+    h3 {
+      font-size: 60px;
+      font-weight: bold;
+    }
+  
+    h4 {
+      font-size: 20px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .hostnumbers {
+      font-size: 30px;
+      color: inherit;
+    }
+
+    p &.updated-at {
+      font-size: 10px;
+    }
+  
+    &.green {
+      background-color: $success;
+
+      p {
+        &.updated-at {
+          color: lighten($success, 20%);
+        }
+      }
+    }
+
+    &.yellow {
+      background-color: $warning;
+
+      p {
+        &.updated-at {
+          color: lighten($warning, 20%);
+        }
+      }
+    }
+
+    &.red {
+      background-color: $failure;
+
+      p {
+        &.updated-at {
+          color: lighten($failure, 20%);
+        }
+      }
+    }
+
+    &.grey {
+      background-color: $unknown;
+
+      p {
+        &.updated-at {
+          color: lighten($unknown, 20%);
+        }
+      }
+    }
+
+    &.blue {
+      background-color: $info;
+
+      p {
+        &.updated-at {
+          color: lighten($info, 20%);
+        }
+      }
+    }
+
+    &.error {
+      background-color: $error;
+
+      p {
+        &.updated-at {
+          color: lighten($error, 20%);
+        }
+      }
+    }
+  }
+}
