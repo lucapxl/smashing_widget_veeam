@@ -43,6 +43,14 @@ password = 'password' # veeam user password
 timespan = (60 * 60 * 24 * 3) # how far back to look for job results
 ```
 
+add the tile in your dashboard .erb file
+
+```html
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="veeam" data-view="Veeam" data-title="Veeam"></div>
+    </li>
+```
+
 ## [Messages](https://github.com/lucapxl/smashing_widget_messages) widget integration
 
 Since this widget only displays the status of the Veeam Backup jobs, I had the need to visualize the details in case the status was not OK. The `veeam.rb` job is setup in a way to send deailed information to the widget [Messages](https://github.com/lucapxl/smashing_widget_messages) I developed to organize "messages" of other widgets in a single box.
