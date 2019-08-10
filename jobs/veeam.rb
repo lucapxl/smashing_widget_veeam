@@ -8,6 +8,7 @@ SCHEDULER.every '60', :first_in => 0 do
     veeamAPIUrl = 'http://VEEAMSERVERHOST:9399/api/'
     username = 'username'
     password = 'password'
+    timespan = (60 * 60 * 24 * 3) # in seconds
 
     #######################################################################
     sessionMngrURL = veeamAPIUrl + 'sessionMngr/?v=latest'
@@ -22,12 +23,8 @@ SCHEDULER.every '60', :first_in => 0 do
     checked_jobs = []
 
     #UTC time minus 1h
-    timespan1day = Time.now.utc - (60 * 60 * 24 * 3) 
-    timespan1day = timespan1day.strftime('%Y-%m-%dT%H:%M:%SZ')
-
-    #UTC time minus 1week
-    timespan1week = Time.now.utc - (60 * 60 * 24 * 7) 
-    timespan1week = timespan1week.strftime('%Y-%m-%dT%H:%M:%SZ')
+    timespanSearch = Time.now.utc - timespan 
+    timespanSearch = timespanSearch.strftime('%Y-%m-%dT%H:%M:%SZ')
 
     # Veeam create a new api session
     response = RestClient::Request.new({
@@ -58,7 +55,7 @@ SCHEDULER.every '60', :first_in => 0 do
                 :type => 'BackupJobSession', 
                 :sortDesc => 'CreationTime', 
                 :format => 'Entities',
-                :filter => 'CreationTime>'+timespan1day
+                :filter => 'CreationTime>'+timespanSearch
             }
         }
         jobs1dXML = Nokogiri::XML(jobs1d)
@@ -102,7 +99,7 @@ SCHEDULER.every '60', :first_in => 0 do
                 :type => 'ReplicaJobSession', 
                 :sortDesc => 'CreationTime', 
                 :format => 'Entities',
-                :filter => 'CreationTime>'+timespan1day
+                :filter => 'CreationTime>'+timespanSearch
             }
         }
         replica1dXML = Nokogiri::XML(replica1d)
