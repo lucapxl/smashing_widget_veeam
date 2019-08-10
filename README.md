@@ -12,6 +12,8 @@ This widget will display the status of the jobs in the following forms:
 * Number of jobs at the bottom of the tile: OK/RUNNING/WARNING/FAILED
 
 ## Example
+![veeam ok](https://raw.githubusercontent.com/lucapxl/smashing_widget_veeam/master/images/veeam-ok.png)
+![veeam-info](https://raw.githubusercontent.com/lucapxl/smashing_widget_veeam/master/images/veeam-info.png)
 
 ## Installation and Configuration
 
@@ -44,7 +46,7 @@ timespan = (60 * 60 * 24 * 3) # how far back to look for job results
 
 Since this widget only displays the status of the Veeam Backup jobs, I had the need to visualize the details in case the status was not OK. The `veeam.rb` job is setup in a way to send deailed information to the widget [Messages](https://github.com/lucapxl/smashing_widget_messages) I developed to organize "messages" of other widgets in a single box.
 
-
+![messages integration](https://raw.githubusercontent.com/lucapxl/smashing_widget_veeam/master/images/messages-1.png)
 
 ## License
 
