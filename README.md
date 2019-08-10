@@ -23,9 +23,9 @@ Like every other Smashing widget, copy the job filee `veeam.rb` in the `jobs` di
 This widget uses `rest-client` `base64` and `nokogiri`. make sure to add them in your dashboard Gemfile
 
 ```Gemfile
-require 'rest-client'
-require 'base64'
-require 'nokogiri'
+gem 'rest-client'
+gem 'base64'
+gem 'nokogiri'
 ```
 
 and to run the update command to download and install them.
