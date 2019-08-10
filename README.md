@@ -12,6 +12,7 @@ This widget will display the status of the jobs in the following forms:
 * Number of jobs at the bottom of the tile: OK/RUNNING/WARNING/FAILED
 
 ## Example
+
 ![veeam ok](https://raw.githubusercontent.com/lucapxl/smashing_widget_veeam/master/images/veeam-ok.png)
 ![veeam-info](https://raw.githubusercontent.com/lucapxl/smashing_widget_veeam/master/images/veeam-info.png)
 
@@ -27,18 +28,18 @@ require 'base64'
 require 'nokogiri'
 ```
 
-and to run the update command to download and install them. 
+and to run the update command to download and install them.
 
 ```bash
 $ bundle update
-``` 
+```
 
 configure `veeam.rb` job file for your environment:
 
 ```ruby
 veeamAPIUrl = 'http://yourserver.host.here:9399/api/' # veeam server API url
 username = 'username' # veeam user that can access the api
-password = 'password' # veeam user password 
+password = 'password' # veeam user password
 timespan = (60 * 60 * 24 * 3) # how far back to look for job results
 ```
 
