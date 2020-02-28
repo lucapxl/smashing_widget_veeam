@@ -10,7 +10,6 @@ SCHEDULER.every '60', :first_in => 0 do
     password = 'password'
     timespan = (60 * 60 * 24 * 3) # in seconds
 
-    #######################################################################
     sessionMngrURL = veeamAPIUrl + 'sessionMngr/?v=latest'
     logoffURL = veeamAPIUrl + '/logonSessions/'
     queryURL = veeamAPIUrl + 'query' 
@@ -31,7 +30,8 @@ SCHEDULER.every '60', :first_in => 0 do
         method: :post,
         url: sessionMngrURL,
         user: username,
-        password: password
+        password: password,
+        verify_ssl: false
     }).execute do |response, request, result|
         case response.code
         when 201
@@ -49,16 +49,21 @@ SCHEDULER.every '60', :first_in => 0 do
 
         #JobType: Backup, BackupCopy ()
         #Retrieve all backup jobs
-        jobs1d = RestClient.get queryURL, {
-            :x_restsvcsessionid => token, 
-            :params => {
-                :type => 'BackupJobSession', 
-                :sortDesc => 'CreationTime', 
-                :format => 'Entities',
-                :filter => 'CreationTime>'+timespanSearch
-            }
-        }
-        jobs1dXML = Nokogiri::XML(jobs1d)
+        jobs1dXML = ''
+        response = RestClient::Request.new({
+            method: :get,
+            url: queryURL + "?type=BackupJobSession&SortDesc=CreationTime&format=Entities&Filter=Creationtime>" + timespanSearch ,
+            verify_ssl: false,
+            headers: {x_restsvcsessionid: token}
+        }).execute do |response, request, result|
+            case response.code
+            when 200
+                xmlStr = response.to_str
+                jobs1dXML = Nokogiri::XML(xmlStr)
+            else
+                fail "error: #{response.to_str}"
+            end
+        end
         #Filter last session backups
         
         jobs1dXML.css('BackupJobSession').each do |child|
@@ -92,17 +97,23 @@ SCHEDULER.every '60', :first_in => 0 do
         end
 
 
-        #Retrieve all replica jobs
-        replica1d = RestClient.get queryURL, {
-            :x_restsvcsessionid => token, 
-            :params => {
-                :type => 'ReplicaJobSession', 
-                :sortDesc => 'CreationTime', 
-                :format => 'Entities',
-                :filter => 'CreationTime>'+timespanSearch
-            }
-        }
-        replica1dXML = Nokogiri::XML(replica1d)
+        replica1dXML = ''
+        #JobType: Backup, BackupCopy ()
+        #Retrieve all backup jobs
+        response = RestClient::Request.new({
+            method: :get,
+            url: queryURL + "?type=ReplicaJobSession&SortDesc=CreationTime&format=Entities&Filter=Creationtime>" + timespanSearch ,
+            verify_ssl: false,
+            headers: {x_restsvcsessionid: token}
+        }).execute do |response, request, result|
+            case response.code
+            when 200
+                xmlStr = response.to_str
+                replica1dXML = Nokogiri::XML(xmlStr)
+            else
+                fail "error: #{response.to_str}"
+            end
+        end
         #Filter last session replica
         replica1dXML.css('ReplicaJobSession').each do |child|
             if !checked_jobs.include? child.at('JobUid').text 
@@ -146,7 +157,12 @@ SCHEDULER.every '60', :first_in => 0 do
     #we delete the session for security
     if sessionID.length > 0
         logoffURL = logoffURL + sessionID
-        deleteSession = RestClient.delete logoffURL, {:x_restsvcsessionid => token}
+        response = RestClient::Request.new({
+            method: :delete,
+            url: logoffURL,
+            verify_ssl: false,
+            headers: {x_restsvcsessionid: token}
+        }).execute 
         token = ''
         sessionID = ''
     end
