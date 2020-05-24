@@ -1,7 +1,8 @@
 $background: #444;
 $text: #fff;
-$success: #597526;
-$warning: #ff9618;
+$success: #444;
+$successs: #597526;
+$warning: #e98000;
 $failure: #ec663c;
 $info: rgb(3, 161, 252);
 $error: #ec663c;
@@ -42,62 +43,26 @@ $unknown: #b5b5b5;
   
     &.green {
       background-color: $success;
-
-      p {
-        &.updated-at {
-          color: lighten($success, 20%);
-        }
-      }
     }
 
     &.yellow {
       background-color: $warning;
-
-      p {
-        &.updated-at {
-          color: lighten($warning, 20%);
-        }
-      }
     }
 
     &.red {
       background-color: $failure;
-
-      p {
-        &.updated-at {
-          color: lighten($failure, 20%);
-        }
-      }
     }
 
     &.grey {
       background-color: $unknown;
-
-      p {
-        &.updated-at {
-          color: lighten($unknown, 20%);
-        }
-      }
     }
 
     &.blue {
       background-color: $info;
-
-      p {
-        &.updated-at {
-          color: lighten($info, 20%);
-        }
-      }
     }
 
     &.error {
       background-color: $error;
-
-      p {
-        &.updated-at {
-          color: lighten($error, 20%);
-        }
-      }
     }
   }
 }

@@ -1,18 +1,19 @@
+require 'rest-client'
+require 'base64'
+require 'nokogiri'
+
+########################################################################################################
+# make sure you edit these variables to fit your environment
+veeamAPIUrl = 'https://VEEAMSERVERHOST:9399/api/'
+username = 'username'
+password = 'password'
+timespan = (60 * 60 * 24 * 3) # how far back to look for job results
+########################################################################################################
+
 SCHEDULER.every '60', :first_in => 0 do
-    
-    require 'rest-client'
-    require 'base64'
-    require 'nokogiri'
-
-    # make sure you edit these variables to fit your environment
-    veeamAPIUrl = 'http://VEEAMSERVERHOST:9399/api/'
-    username = 'username'
-    password = 'password'
-    timespan = (60 * 60 * 24 * 3) # in seconds
-
     sessionMngrURL = veeamAPIUrl + 'sessionMngr/?v=latest'
     logoffURL = veeamAPIUrl + '/logonSessions/'
-    queryURL = veeamAPIUrl + 'query' 
+    queryURL = veeamAPIUrl + '/query' 
 
     token= ''
     sessionID = '' 
@@ -21,9 +22,7 @@ SCHEDULER.every '60', :first_in => 0 do
     veeam_count = [0,0,0,0]
     checked_jobs = []
 
-    #UTC time minus 1h
-    timespanSearch = Time.now.utc - timespan 
-    timespanSearch = timespanSearch.strftime('%Y-%m-%dT%H:%M:%SZ')
+    timespan = timespan.strftime('%Y-%m-%dT%H:%M:%SZ')
 
     # Veeam create a new api session
     response = RestClient::Request.new({
@@ -52,7 +51,7 @@ SCHEDULER.every '60', :first_in => 0 do
         jobs1dXML = ''
         response = RestClient::Request.new({
             method: :get,
-            url: queryURL + "?type=BackupJobSession&SortDesc=CreationTime&format=Entities&Filter=Creationtime>" + timespanSearch ,
+            url: queryURL + "?type=BackupJobSession&SortDesc=CreationTime&format=Entities&Filter=Creationtime>" + timespan ,
             verify_ssl: false,
             headers: {x_restsvcsessionid: token}
         }).execute do |response, request, result|
@@ -102,7 +101,7 @@ SCHEDULER.every '60', :first_in => 0 do
         #Retrieve all backup jobs
         response = RestClient::Request.new({
             method: :get,
-            url: queryURL + "?type=ReplicaJobSession&SortDesc=CreationTime&format=Entities&Filter=Creationtime>" + timespanSearch ,
+            url: queryURL + "?type=ReplicaJobSession&SortDesc=CreationTime&format=Entities&Filter=Creationtime>" + timespan ,
             verify_ssl: false,
             headers: {x_restsvcsessionid: token}
         }).execute do |response, request, result|

@@ -2,7 +2,7 @@
 <li data-bind-class="veeamstatus">
 <h1 class="title" data-bind="title"></h1>
 <div data-showif="veeamstatus | equals 'error'"> <!-- error -->
-  <h4>Error querying Nagios.</h4>
+  <h4>Error querying Veeam server.</h4>
 </div> <!-- /no error -->
 
 <div data-hideif="veeamstatus | equals 'error'"> <!-- no error -->
@@ -10,9 +10,6 @@
   <i data-showif="veeamstatus | equals 'red'" class='fa fa-exclamation-circle'></i>
   <i data-showif="veeamstatus | equals 'blue'" class='fa fa-info-circle'></i>
   <i data-showif="veeamstatus | equals 'green'" class='fa fa-check'></i>
-  <h1 class='hostnumbers'>
-    <span data-bind="success"></span>/<span data-bind="info"></span>/<span data-bind="warning"></span>/<span data-bind="failed"></span>
-  </h1>
   <p class="updated-at" data-bind="updatedAtMessage"></p>
 </div> <!-- /no error -->
 </li>

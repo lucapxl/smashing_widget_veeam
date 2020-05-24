@@ -18,26 +18,29 @@ This widget will display the status of the jobs in the following forms:
 
 ## Installation and Configuration
 
-Like every other Smashing widget, copy the job filee `veeam.rb` in the `jobs` directory of your dashboard as well as the `veeam` subfolder in the widgets folder.
-
 This widget uses `rest-client` `base64` and `nokogiri`. make sure to add them in your dashboard Gemfile
-
 ```Gemfile
 gem 'rest-client'
 gem 'base64'
 gem 'nokogiri'
 ```
-
 and to run the update command to download and install them.
 
 ```bash
 $ bundle update
 ```
 
-configure `veeam.rb` job file for your environment:
+Create a "veeam" folder in your ```widgets``` directory and clone this repository inside it. 
+make a symbolic link of the file ```jobs/veeam.rb``` in the ```/jobs``` directory of your dashboard.
+for example, if your smashing installation directory is in ```/opt/dashboard/``` you would run this:
+```Shell
+$ ln -s /opt/dashboard/widgets/veeam/jobs/veeam.rb /opt/dashboard/jobs/veeam.rb
+```
+
+configure `jobs/veeam.rb` job file for your environment:
 
 ```ruby
-veeamAPIUrl = 'http://yourserver.host.here:9399/api/' # veeam server API url
+veeamAPIUrl = 'https://yourserver.host.here:9399/api/' # veeam server API url
 username = 'username' # veeam user that can access the api
 password = 'password' # veeam user password
 timespan = (60 * 60 * 24 * 3) # how far back to look for job results
