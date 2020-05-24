@@ -10,6 +10,8 @@ password = 'password'
 timespan = (60 * 60 * 24 * 3) # how far back to look for job results
 ########################################################################################################
 
+timespan = Time.now.utc - timespan
+
 SCHEDULER.every '60', :first_in => 0 do
     sessionMngrURL = veeamAPIUrl + 'sessionMngr/?v=latest'
     logoffURL = veeamAPIUrl + '/logonSessions/'
@@ -22,7 +24,7 @@ SCHEDULER.every '60', :first_in => 0 do
     veeam_count = [0,0,0,0]
     checked_jobs = []
 
-    timespan = timespan.strftime('%Y-%m-%dT%H:%M:%SZ')
+    timespanSearch = timespan.strftime('%Y-%m-%dT%H:%M:%SZ')
 
     # Veeam create a new api session
     response = RestClient::Request.new({
@@ -51,7 +53,7 @@ SCHEDULER.every '60', :first_in => 0 do
         jobs1dXML = ''
         response = RestClient::Request.new({
             method: :get,
-            url: queryURL + "?type=BackupJobSession&SortDesc=CreationTime&format=Entities&Filter=Creationtime>" + timespan ,
+            url: queryURL + "?type=BackupJobSession&SortDesc=CreationTime&format=Entities&Filter=Creationtime>" + timespanSearch ,
             verify_ssl: false,
             headers: {x_restsvcsessionid: token}
         }).execute do |response, request, result|
@@ -101,7 +103,7 @@ SCHEDULER.every '60', :first_in => 0 do
         #Retrieve all backup jobs
         response = RestClient::Request.new({
             method: :get,
-            url: queryURL + "?type=ReplicaJobSession&SortDesc=CreationTime&format=Entities&Filter=Creationtime>" + timespan ,
+            url: queryURL + "?type=ReplicaJobSession&SortDesc=CreationTime&format=Entities&Filter=Creationtime>" + timespanSearch ,
             verify_ssl: false,
             headers: {x_restsvcsessionid: token}
         }).execute do |response, request, result|
